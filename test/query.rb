@@ -17,13 +17,15 @@ class TestQuery < MiniTest::Test
     query = @db.prepare('select * from foods')
     
     while query.step() == SQLITE_ROW
+      # Step though each field in row.
+      # k is column name, v is field value
       query.each do |k,v|
-        puts "  #{k}: #{v}"
+        #puts "  #{k}: #{v}"
       end    
     end
   end
 
-  def test_row_query()
+  def dont_test_row_query()
     # Create a query
     query = SQLite::Query.new(@db)
     
@@ -33,7 +35,7 @@ class TestQuery < MiniTest::Test
     
     # Iterate and print
     recordset.each do |row|
-      puts "%3i %2i %-30s" % [row[0], row[1], row[2]]
+      puts "%3i %2i %-30s" % [row['id'], row[1], row[2]]
     end
   end
   

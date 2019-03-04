@@ -178,6 +178,13 @@ VALUE m_error(VALUE self)
     return rb_str_new2(sqlite3_errmsg(c->handle));
 }
 
+/* call-seq: SQLite3::Database.open(file)
+ *
+ * Open a SQLite database.
+ *
+ * file: the operating system file
+ */
+
 VALUE m_open(VALUE self, VALUE db)
 {
     connection* c = get_object(self);

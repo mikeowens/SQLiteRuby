@@ -2,16 +2,29 @@
 
 ## About
 
-This is a stripped-down Ruby C extension for SQLite
+This is a stripped-down Ruby C extension for SQLite. It compiles/embeds the
+SQLite amalgamation in the extension and provides a very simple SQLite API and
+higher level Query/Recordset API.
 
-To compile and test the extension:
+To install from the internets:
 
+```
+    gem install sqlite
+```
+
+To build/install from source:
+
+```
+    git clone git@github.com:mikeowens/SQLiteRuby.git
+    cd SQLiteRuby
     gem install rake-compiler
     rake
+    rake gem
+    cd pkg
+    gem install -l sqlite-*.gem
+```
 
 ## Usage
-
-Example:
 
 ```ruby
     @db = SQLite::Database.new()

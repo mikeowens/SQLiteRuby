@@ -2,7 +2,7 @@ require 'sqlite/sqlite'
 
 module SQLite
 
-  VERSION = '1.0'
+  VERSION = '1.0.3'
 
 class Database
 

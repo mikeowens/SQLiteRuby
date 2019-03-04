@@ -2,25 +2,16 @@ require 'rake/extensiontask'
 require 'rubygems/package_task'
 
 Rake::ExtensionTask.new 'sqlite' do |ext|
-
-  # This causes the shared object to be placed in lib/sqlite/sqlite.so
-  #
-  # It allows lib/sqlite.rb to load different versions if you ship a
-  # precompiled extension that supports multiple ruby versions.
-
   ext.lib_dir = 'lib/sqlite'
 end
 
-s = Gem::Specification.new 'sqlite', '1.0' do |s|
-  s.summary = 'SQLite wrapper'
+s = Gem::Specification.new 'sqlite', '1.0.3' do |s|
+  s.name = 'sqlite'
+  s.summary = 'Small, Simple SQLite extension'
   s.authors = %w[mikeowens@gmail.com]
-
-  # This tells RubyGems to build an extension upon install
-
+  s.homepage = 'https://github.com/mikeowens/SQLiteRuby'
+  s.license = 'MIT'
   s.extensions = %w[ext/sqlite/extconf.rb]
-
-  # naturally you must include the extension source in the gem
-
   s.files = %w[
     MIT-LICENSE
     Rakefile
@@ -28,21 +19,16 @@ s = Gem::Specification.new 'sqlite', '1.0' do |s|
     ext/sqlite/main.c
     ext/sqlite/sqlite3_dist.c
     ext/sqlite/ruby_sqlite3.c
+    ext/sqlite/ruby_sqlite3.h
     ext/sqlite/ruby_sqlite3_stmt.c
+    ext/sqlite/ruby_sqlite3_stmt.h
     lib/sqlite.rb
   ]
 end
 
-# The package task builds the gem in pkg/sqlite-1.0.gem so you can test
-# installing it.
-
 Gem::PackageTask.new s do end
-
-# This isn't a good test, but does provide a sanity check
-
 task test: %w[compile] do
   ruby '-Ilib', '-rsqlite', '-e', 'p SQLite::Database.new()'
 end
 
 task default: :test
-

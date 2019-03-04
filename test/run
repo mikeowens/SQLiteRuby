@@ -8,6 +8,5 @@ require 'minitest/autorun'
 $test_dir = "#{Dir.pwd}"
 
 require 'query'
-require 'recordset'
 
 MiniTest.autorun

@@ -1,16 +1,28 @@
-module SQLite
+require 'msgpack'
 
-class TestRecordset
+class TestRecordset < MiniTest::Test
 
-  def initialize()
+  def setup()
     @db = SQLite::Database.new()
     rc = @db.open("#{$test_dir}/files/foods.db")
     
     if rc != SQLITE_OK
       puts @db.error()
-    end
+    end    
   end
 
+  def teardown()  
+    
+  end
+
+  def test_message_pack()
+    query = SQLite::Query.new(@db)    
+    sql = %Q{ select id, type_id, name from foods order by id }
+    recordset = query.exec(sql)
+    
+    msgPackToRubyRecordset(recordset.toMsgPack)    
+  end
+  
   # This tests the general C->Ruby MessagePack compatibility as well as formal
   # Recordset pack format.
   #
@@ -63,43 +75,41 @@ class TestRecordset
     assert recordset.columns[1] == 'type_id'
     assert recordset.columns[2] == 'name'
 
-    assert recordset.types[0]   == 2
-    assert recordset.types[1]   == 2
-    assert recordset.types[2]   == 10
+    assert recordset.types[0]   == 3
+    assert recordset.types[1]   == 3
+    assert recordset.types[2]   == 3
 
     rows = recordset.data
 
-    assert rows[0][0]           == '1'
-    assert rows[0][1]           == '100'
+    assert rows[0][0]           == 1
+    assert rows[0][1]           == 100
     assert rows[0][2]           == 'Bagels'
 
-    assert rows[1][0]           == '2'
-    assert rows[1][1]           == '100'
+    assert rows[1][0]           == 2
+    assert rows[1][1]           == 100
     assert rows[1][2]           == 'Bagels, raisin'
 
-    assert rows[2][0]           == '3'
-    assert rows[2][1]           == '100'
+    assert rows[2][0]           == 3
+    assert rows[2][1]           == 100
     assert rows[2][2]           == 'Bavarian Cream Pie'
 
-    assert rows[3][0]           == '4'
-    assert rows[3][1]           == '100'
+    assert rows[3][0]           == 4
+    assert rows[3][1]           == 100
     assert rows[3][2]           == 'Bear Claws'
 
-    assert rows[4][0]           == '5'
-    assert rows[4][1]           == '100'
+    assert rows[4][0]           == 5
+    assert rows[4][1]           == 100
     assert rows[4][2]           == 'Black and White cookies'
 
-    assert rows[5][0]           == '6'
-    assert rows[5][1]           == '100'
+    assert rows[5][0]           == 6
+    assert rows[5][1]           == 100
     assert rows[5][2]           == 'Bread (with nuts)'
 
-    assert rows[6][0]           == '7'
-    assert rows[6][1]           == '100'
+    assert rows[6][0]           == 7
+    assert rows[6][1]           == 100
     assert rows[6][2]           == 'Butterfingers'
 
     return recordset.toMsgPack()
   end
 
-end
-
-end # module SQLite
+end # class TestRecordset
